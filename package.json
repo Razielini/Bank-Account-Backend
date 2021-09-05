@@ -1,0 +1,46 @@
+{
+  "name": "bank-account-backend",
+  "version": "1.0.0",
+  "description": "Bank Account Backend",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node-dev ./src"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Razielini/Bank-Account-Backend.git"
+  },
+  "keywords": [],
+  "author": "Raziel Carvajal <razielco@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Razielini/Bank-Account-Backend/issues"
+  },
+  "homepage": "https://github.com/Razielini/Bank-Account-Backend#readme",
+  "devDependencies": {
+    "@types/jest": "^26.0.10",
+    "@types/node": "^14.14.37",
+    "@types/config": "^0.0.39",
+    "@types/cors": "^2.8.12",
+    "@types/express": "^4.17.11",
+    "@types/pino": "^6.3.11",
+    "eslint": "^7.2.0",
+    "eslint-config-airbnb-base": "^14.2.0",
+    "eslint-plugin-import": "^2.21.2",
+    "eslint-plugin-jest": "^23.20.0",
+    "jest": "^26.4.2",
+    "prettier": "^2.3.2",
+    "ts-jest": "^26.2.0",
+    "ts-node": "^9.0.0",
+    "typescript": "^4.2.3",
+    "ts-node-dev": "^1.1.6"
+  },
+  "dependencies": {
+    "config": "^3.3.1",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "pino": "^6.3.2",
+    "pino-pretty": "^4.7.1"
+  }
+}
