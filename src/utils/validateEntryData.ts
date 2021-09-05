@@ -1,7 +1,15 @@
 import { check, validationResult } from 'express-validator';
+import config from 'config';
+import AppError from './appError';
 
 const auth = {
   register: [
+    check('product').custom((val, { req }) => {
+      if (!Object.values(config.get('interfaces.typeProducts')).includes(req.body.product)) {
+        throw new AppError({ message: 'Invalid product', status: 400 });
+      }
+      return true;
+    }),
     check('name').isString().not().isEmpty().withMessage('Name should be a string').escape(),
     check('lastName')
       .isString()
