@@ -11,4 +11,27 @@ export default {
     algorithm: 'HS256',
     expiresIn: 300000,
   },
+  interfaces: {
+    typeProducts: {
+      CHEQUERA: 'CHEQUERA',
+      CREDITO: 'CREDITO',
+      DEBITO: 'DEBITO',
+    },
+    typeTransfer: {
+      CARGO: 'CARGO',
+      ABONO: 'ABONO',
+    },
+    typeOperation: {
+      SPEI: 'SPEI',
+      INTERBANCARIO: 'INTERBANCARIO',
+      TRANSFERENCIA: 'TRANSFERENCIA',
+      OTHER: 'OTHER',
+    },
+    typeStatus: {
+      PENDIENTE: 'PENDIENTE',
+      APROBADO: 'APROBADO',
+      ERROR: 'ERROR',
+    },
+    defaultTypeStatus: 'PENDIENTE',
+  },
 };
