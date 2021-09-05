@@ -1,17 +1,15 @@
+import functions from '../functions';
+
 const userController = (storeInjection: any) => {
   let store = storeInjection;
 
-  const upsert = async ({ filter, update }: any) => {
-    const item = await store.findOneAndUpdate(filter, update, {
-      upsert: true,
-      new: true,
-    });
-
-    return item;
+  const register = async ({ filter, update }: any) => {
+    const user = await functions.mongodb.fetchDocument({ store, filter });
+    if (!user) return functions.mongodb.createDocument({ store, data: update });
   };
 
   return {
-    upsert,
+    register,
   };
 };
 

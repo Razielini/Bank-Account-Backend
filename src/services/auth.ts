@@ -12,7 +12,7 @@ const authService = ({ store: { user } }: any) => {
     if (data.password !== data.confirmPassword)
       return next(new AppError({ message: 'Passwords do not match', status: 400 }));
 
-    const user = await userController.upsert({
+    const user = await userController.register({
       filter: { email: data.email },
       update: { ...data },
     });

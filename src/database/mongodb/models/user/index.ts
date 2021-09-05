@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import { IPerson } from '../person';
+import functions from '../../../../functions';
 
 export interface IUser extends Document {
   email: string; // Nombre de usuario
@@ -16,5 +16,17 @@ const userSchema: Schema = new Schema<IUser>({
   token: { type: String },
   status: { type: Boolean, default: false },
 });
+
+userSchema.pre('save', async function (this: IUser, next: any) {
+  const hash = await functions.bcrypt.hashPassword({ password: this.password });
+  this.password = hash;
+  next();
+});
+
+userSchema.methods.toJSON = function () {
+  var obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
 
 export default mongoose.model<IUser>('User', userSchema, 'user');
