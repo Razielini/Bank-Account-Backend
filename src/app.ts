@@ -2,6 +2,7 @@ import express, { Application, Router } from 'express';
 import cors from 'cors';
 import { default as Routes } from './routes';
 import { IRoute } from './interfaces/router';
+import { mongodb } from './database';
 
 const init = async ({ logger, config }: any) => {
   const app: Application = express();
@@ -12,6 +13,11 @@ const init = async ({ logger, config }: any) => {
   app.use(cors());
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
+
+  mongodb.connection({
+    db: config.get('mongo_db.uri'),
+    logger: logger.child({ module: 'database' }),
+  });
 
   const appRouter: IRoute = {
     app,
