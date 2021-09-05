@@ -3,9 +3,19 @@ import functions from '../functions';
 const userController = (storeInjection: any) => {
   let store = storeInjection;
 
-  const register = async ({ filter, update }: any) => {
+  const register = async ({ data, options }: any) => {
+    const user = await create({
+      filter: { email: data.email },
+      update: { ...data },
+      options,
+    });
+
+    return user.toJSON();
+  };
+
+  const create = async ({ filter, update, options }: any) => {
     const user = await functions.mongodb.fetchDocument({ store, filter });
-    if (!user) return functions.mongodb.createDocument({ store, data: update });
+    if (!user) return functions.mongodb.createDocument({ store, data: update, options });
   };
 
   const findOne = async ({ filter }: any) =>
