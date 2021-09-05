@@ -3,8 +3,10 @@ import AppError from '../utils/AppError';
 import catchAsync from '../utils/catchAsync';
 import config from 'config';
 import { default as controllers } from '../controllers';
+import mongoose from 'mongoose';
 
-const authService = ({ store: { user } }: any) => {
+const authService = ({ store: { user, person } }: any) => {
+  const personController = controllers.person(person);
   const userController = controllers.user(user);
   const authController = controllers.auth();
 
@@ -14,16 +16,34 @@ const authService = ({ store: { user } }: any) => {
     if (!authController.compareRawPassword(data))
       return next(new AppError({ message: 'Passwords do not match', status: 400 }));
 
-    const user = await userController.register({
-      filter: { email: data.email },
-      update: { ...data },
-    });
+    const session = await mongoose.startSession();
+    session.startTransaction();
 
+    const user = await userController.register({ data, options: { session } });
     if (!user) return next(new AppError({ message: 'Error: No user created', status: 400 }));
+
+    const person = await personController.register({
+      data: {
+        _id: user._id,
+        ...data,
+      },
+      options: { session },
+    });
+    if (!person) return next(new AppError({ message: 'Error: No poerson created', status: 400 }));
+
+    await session
+      .commitTransaction()
+      .catch(async (err: any) => {
+        next(new AppError({ message: 'Error: Auth.Register abortTransaction', status: 400 }));
+        await session.abortTransaction();
+      })
+      .finally(() => {
+        session.endSession();
+      });
 
     responses.success({
       res,
-      message: { ...user.toJSON() },
+      message: { user, person },
     });
   });
 
@@ -56,12 +76,13 @@ const authService = ({ store: { user } }: any) => {
       body: { userId },
     } = req;
     const user = await userController.findOne({ filter: { _id: userId } });
+    const person = await personController.findOne({ filter: { _id: userId } });
 
     if (!user) next(new AppError({ message: 'Unauthorizer.', status: 401 }));
 
     responses.success({
       res,
-      message: { ...user.toJSON() },
+      message: { user: user.toJSON(), person: person.toJSON() },
     });
   });
 
