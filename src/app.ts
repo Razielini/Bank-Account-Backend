@@ -22,8 +22,10 @@ const init = async ({ logger, config }: any) => {
   const appRouter: IRoute = {
     app,
     router,
+    store: mongodb.models,
   };
 
+  Routes.auth(appRouter);
   Routes.ping(appRouter);
 
   app.all('*', (req, res, next) => {
