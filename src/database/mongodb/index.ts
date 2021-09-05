@@ -1,5 +1,6 @@
 import { default as user } from './models/user';
 import { default as person } from './models/person';
+import { default as account } from './models/account';
 import connection from './connection';
 
 export default {
@@ -7,5 +8,6 @@ export default {
   models: {
     user,
     person,
+    account,
   },
 };
