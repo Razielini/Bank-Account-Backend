@@ -8,8 +8,20 @@ const userController = (storeInjection: any) => {
     if (!user) return functions.mongodb.createDocument({ store, data: update });
   };
 
+  const findOne = async ({ filter }: any) =>
+    functions.mongodb.fetchDocument({ store, filter }) || false;
+
+  const comparePasswords = async ({ password, hashedPassword }: any) => {
+    return functions.bcrypt.comparePasswords({
+      password,
+      hashedPassword,
+    });
+  };
+
   return {
     register,
+    findOne,
+    comparePasswords,
   };
 };
 
