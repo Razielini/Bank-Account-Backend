@@ -1,5 +1,5 @@
-import { sayPong } from '../functions/pong';
+import functions from '../functions';
 
-const pong = () => sayPong();
+const pong = () => functions.pong.sayPong();
 
 export default pong;
