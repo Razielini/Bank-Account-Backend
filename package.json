@@ -4,6 +4,8 @@
   "description": "Bank Account Backend",
   "main": "index.js",
   "scripts": {
+    "test": "jest",
+    "tdd": "jest --watch",
     "start": "ts-node-dev ./src"
   },
   "repository": {
