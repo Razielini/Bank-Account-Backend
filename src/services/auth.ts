@@ -5,9 +5,10 @@ import config from 'config';
 import { default as controllers } from '../controllers';
 import mongoose from 'mongoose';
 
-const authService = ({ store: { user, person } }: any) => {
+const authService = ({ store: { user, person, account } }: any) => {
   const personController = controllers.person(person);
   const userController = controllers.user(user);
+  const accountController = controllers.account(account);
   const authController = controllers.auth();
 
   const register = catchAsync(async (req: any, res: any, next: any) => {
@@ -29,7 +30,16 @@ const authService = ({ store: { user, person } }: any) => {
       },
       options: { session },
     });
-    if (!person) return next(new AppError({ message: 'Error: No poerson created', status: 400 }));
+    if (!person) return next(new AppError({ message: 'Error: No person created', status: 400 }));
+
+    const account = await accountController.register({
+      data: {
+        person: user._id,
+        ...data,
+      },
+      options: { session },
+    });
+    if (!person) return next(new AppError({ message: 'Error: No account created', status: 400 }));
 
     await session
       .commitTransaction()
@@ -43,7 +53,7 @@ const authService = ({ store: { user, person } }: any) => {
 
     responses.success({
       res,
-      message: { user, person },
+      message: { user, person, account },
     });
   });
 
