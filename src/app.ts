@@ -1,5 +1,7 @@
 import express, { Application, Router } from 'express';
 import cors from 'cors';
+import { default as Routes } from './routes';
+import { IRoute } from './interfaces/router';
 
 const init = async ({ logger, config }: any) => {
   const app: Application = express();
@@ -11,11 +13,12 @@ const init = async ({ logger, config }: any) => {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
 
-  app.use('/ping', (req, res, next) => {
-    res.status(200).json({
-      data: 'pong',
-    });
-  });
+  const appRouter: IRoute = {
+    app,
+    router,
+  };
+
+  Routes.ping(appRouter);
 
   app.all('*', (req, res, next) => {
     res.status(404).json({
