@@ -2,11 +2,21 @@
   "name": "bank-account-backend",
   "version": "1.0.0",
   "description": "Bank Account Backend",
-  "main": "index.js",
+  "main": "./src",
+  "engines": {
+    "npm": ">=7"
+  },
+  "files": [
+    "src/"
+  ],
   "scripts": {
     "test": "jest",
     "tdd": "jest --watch",
-    "start": "ts-node-dev ./src"
+    "start": "ts-node-dev ./src",
+    "docker": "DOCKER_BUILDKIT=1 docker build --no-cache -t bank-account/backend -f docker/Dockerfile .",
+    "docker:win": "docker build --no-cache -t bank-account/backend -f docker/Dockerfile .",
+    "docker:run": "docker run -it bank-account/backend",
+    "docker:run:sh": "docker run -it bank-account/backend sh"
   },
   "repository": {
     "type": "git",
