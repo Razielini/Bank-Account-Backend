@@ -28,10 +28,14 @@ const userController = (storeInjection: any) => {
     });
   };
 
+  const logicalDelete = async ({ data }: any) =>
+    functions.mongodb.logicalDelteDocument({ store, data }) || false;
+
   return {
     register,
     findOne,
     comparePasswords,
+    logicalDelete,
   };
 };
 
