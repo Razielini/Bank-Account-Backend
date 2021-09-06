@@ -33,6 +33,8 @@ const accountSchema: Schema = new Schema<IAccount>({
   person: { type: Schema.Types.ObjectId, required: true },
 });
 
+accountSchema.index({ numberAccount: 1 }, { unique: true });
+
 accountSchema.pre('save', async function (this: IAccount, next: any) {
   this.numberAccount = functions.generic.generate.accountNumber();
   if (!this.nip) this.nip = functions.generic.generate.nip();
