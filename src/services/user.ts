@@ -1,12 +1,10 @@
 import responses from '../utils/responses';
-import AppError from '../utils/AppError';
 import catchAsync from '../utils/catchAsync';
-import config from 'config';
 import { default as controllers } from '../controllers';
-import mongoose from 'mongoose';
 
-const userService = ({ store: { user } }: any) => {
+const userService = ({ store: { user, person } }: any) => {
   const userController = controllers.user(user);
+  const personController = controllers.person(person);
 
   const logicalDelete = catchAsync(async (req: any, res: any, next: any) => {
     const {
@@ -34,9 +32,26 @@ const userService = ({ store: { user } }: any) => {
     });
   });
 
+  const update = catchAsync(async (req: any, res: any, next: any) => {
+    const { body: data } = req;
+
+    const user = await personController.update({
+      data: {
+        _id: data.userId,
+        ...data,
+      },
+    });
+
+    responses.success({
+      res,
+      message: { user },
+    });
+  });
+
   return {
     logicalDelete,
     get,
+    update,
   };
 };
 

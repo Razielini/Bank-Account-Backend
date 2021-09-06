@@ -39,6 +39,30 @@ const auth = {
   ],
 };
 
+const user = {
+  update: [
+    check('phone')
+      .optional()
+      .isString()
+      .not()
+      .isEmpty()
+      .withMessage('phone should be a string')
+      .escape(),
+    check('address')
+      .optional()
+      .isString()
+      .not()
+      .isEmpty()
+      .withMessage('address should be a string')
+      .escape(),
+    (req: any, res: any, next: any) => {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) return res.status(422).json({ status: 422, errors: errors.array() });
+      next();
+    },
+  ],
+};
+
 const transfer = {
   register: [
     check('type').custom((val, { req }) => {
@@ -81,4 +105,4 @@ const transfer = {
   ],
 };
 
-export default { auth, transfer };
+export default { auth, transfer, user };
