@@ -1,0 +1,11 @@
+.git
+.DS_Store
+node_modules
+__tests__
+coverage
+docker
+scripts
+config/*
+!config/default.ts
+!config/custom-environment-variables.ts
+
