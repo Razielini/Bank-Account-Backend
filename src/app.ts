@@ -1,12 +1,17 @@
 import express, { Application, Router } from 'express';
 import cors from 'cors';
 import { default as Routes } from './routes';
-import { IRoute } from './interfaces/router';
 import { mongodb } from './database';
 
 const init = async ({ logger, config }: any) => {
+  process.on('uncaughtException', (err) => {
+    logger.error(err.name, err.message);
+    logger.error('UNCAUGHT EXCEPTION! 💥 Shutting down...');
+
+    process.exit(1);
+  });
+
   const app: Application = express();
-  const router: Router = express.Router();
 
   const port = config.get('system.port') || 3000;
 
@@ -19,14 +24,13 @@ const init = async ({ logger, config }: any) => {
     logger: logger.child({ module: 'database' }),
   });
 
-  const appRouter: IRoute = {
-    app,
-    router,
-    store: mongodb.models,
-  };
-
-  Routes.auth(appRouter);
-  Routes.ping(appRouter);
+  Object.values(Routes).forEach((route: any) => {
+    route({
+      app,
+      router: express.Router(),
+      store: mongodb.models,
+    });
+  });
 
   app.all('*', (req, res, next) => {
     res.status(404).json({
@@ -42,6 +46,12 @@ const init = async ({ logger, config }: any) => {
   } catch (error: any) {
     logger.error(`Error occured ${error.message}`);
   }
+
+  process.on('unhandledRejection', (err: any) => {
+    logger.error(err.name, err.message);
+    logger.error('UNHANDLED REJECTION! 💥 Shutting down...');
+    process.exit(1);
+  });
 };
 
 export default init;

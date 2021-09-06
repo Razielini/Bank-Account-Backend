@@ -3,6 +3,7 @@ import { default as pong } from './pong';
 import { default as user } from './user';
 import { default as person } from './person';
 import { default as account } from './account';
+import { default as transfer } from './transfer';
 
 export default {
   pong,
@@ -10,4 +11,5 @@ export default {
   auth,
   person,
   account,
+  transfer,
 };
