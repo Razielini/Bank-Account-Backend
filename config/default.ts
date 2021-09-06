@@ -34,4 +34,9 @@ export default {
     },
     defaultTypeStatus: 'PENDIENTE',
   },
+  mongoDb: {
+    find: {
+      limit: 10,
+    },
+  },
 };
