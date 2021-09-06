@@ -1,0 +1,344 @@
+{
+	"info": {
+		"_postman_id": "b3ddc75f-f6ac-4650-af4f-0b9b6f417edb",
+		"name": "Bank Account",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.unset(\"RANDOM_NUMBER\");\r",
+									"postman.setEnvironmentVariable(\"RANDOM_NUMBER\", `${Math.floor(Math.random() * 99999)}`);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"product\": \"DEBITO\",\r\n    \"name\": \"Fulanita_{{RANDOM_NUMBER}}\",\r\n    \"lastName\": \"Gonzalez_{{RANDOM_NUMBER}}\",\r\n    \"phone\": \"01800-{{RANDOM_NUMBER}}\",\r\n    \"address\": \"Street Fulanita_street_{{RANDOM_NUMBER}}\",\r\n    \"rfc\": \"rfc_{{RANDOM_NUMBER}}\",\r\n    \"email\": \"fulanito_{{RANDOM_NUMBER}}@gmail.com\",\r\n    \"password\": \"pass_{{RANDOM_NUMBER}}\",\r\n    \"confirmPassword\": \"pass_{{RANDOM_NUMBER}}\"\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER_URL}}/auth/register",
+							"host": [
+								"{{SERVER_URL}}"
+							],
+							"path": [
+								"auth",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response should contains token\", function () {\r",
+									"    pm.response.to.have.jsonBody(\"data.token\");\r",
+									"    var json = JSON.parse(responseBody);\r",
+									"\r",
+									"    pm.environment.unset(\"AUTH_TOKEN\");\r",
+									"    postman.setEnvironmentVariable(\"AUTH_TOKEN\", `${json.data.token}`);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"fulanito_{{RANDOM_NUMBER}}@gmail.com\",\r\n    \"password\": \"pass_{{RANDOM_NUMBER}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER_URL}}/auth/login",
+							"host": [
+								"{{SERVER_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Me",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response should contains token\", function () {\r",
+									"    pm.response.to.have.jsonBody(\"data.token\");\r",
+									"    var json = JSON.parse(responseBody);\r",
+									"\r",
+									"    pm.environment.unset(\"AUTH_TOKEN\");\r",
+									"    postman.setEnvironmentVariable(\"AUTH_TOKEN\", `${json.data.token}`);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER_URL}}/auth/me",
+							"host": [
+								"{{SERVER_URL}}"
+							],
+							"path": [
+								"auth",
+								"me"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Transfer",
+			"item": [
+				{
+					"name": "Register",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"type\": \"CARGO\",\r\n    \"operation\": \"SPEI\",\r\n    \"amount\": 100,\r\n    \"concept\": \"concept_{{RANDOM_NUMBER}}\",\r\n    \"reference\": \"from_me_to_you\",\r\n    \"originAccount\": \"1630887111986\",\r\n    \"destinationAccount\": \"1630887233922\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER_URL}}/transfer/register",
+							"host": [
+								"{{SERVER_URL}}"
+							],
+							"path": [
+								"transfer",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER_URL}}/transfer/",
+							"host": [
+								"{{SERVER_URL}}"
+							],
+							"path": [
+								"transfer",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "Get",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER_URL}}/user/",
+							"host": [
+								"{{SERVER_URL}}"
+							],
+							"path": [
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{SERVER_URL}}/user/",
+							"host": [
+								"{{SERVER_URL}}"
+							],
+							"path": [
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update (Phone y/o Address)",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.environment.unset(\"RANDOM_NUMBER\");\r",
+									"postman.setEnvironmentVariable(\"RANDOM_NUMBER\", `${Math.floor(Math.random() * 99999)}`);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"phone\": \"01800-{{RANDOM_NUMBER}}\",\r\n    \"address\": \"Street Fulanita_street_{{RANDOM_NUMBER}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{SERVER_URL}}/user/",
+							"host": [
+								"{{SERVER_URL}}"
+							],
+							"path": [
+								"user",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ping",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{SERVER_URL}}/ping",
+					"host": [
+						"{{SERVER_URL}}"
+					],
+					"path": [
+						"ping"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "JWT {{AUTH_TOKEN}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
