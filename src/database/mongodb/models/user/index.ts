@@ -14,7 +14,7 @@ const userSchema: Schema = new Schema<IUser>({
   password: { type: String, required: true },
   sessionActive: { type: Boolean, default: false },
   token: { type: String },
-  status: { type: Boolean, default: false },
+  status: { type: Boolean, default: true },
 });
 
 userSchema.pre('save', async function (this: IUser, next: any) {
