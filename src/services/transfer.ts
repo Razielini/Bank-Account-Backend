@@ -101,6 +101,7 @@ const transferService = ({ store: { transfer, account } }: any) => {
         originAccount: newBalanceOriginalAccount,
         destinationAccount: newBalanceDestinationAccount,
       },
+      status: 201,
     });
   });
 
