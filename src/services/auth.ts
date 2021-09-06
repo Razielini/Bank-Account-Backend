@@ -54,6 +54,7 @@ const authService = ({ store: { user, person, account } }: any) => {
     responses.success({
       res,
       message: { user, person, account },
+      status: 201,
     });
   });
 
