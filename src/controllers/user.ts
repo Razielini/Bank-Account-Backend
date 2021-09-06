@@ -29,7 +29,7 @@ const userController = (storeInjection: any) => {
   };
 
   const logicalDelete = async ({ data }: any) =>
-    functions.mongodb.logicalDelteDocument({ store, data }) || false;
+    functions.mongodb.logicalDeleteDocument({ store, data }) || false;
 
   return {
     register,
