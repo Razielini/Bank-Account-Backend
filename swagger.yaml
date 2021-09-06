@@ -1,0 +1,348 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Bank Account Api
+paths:
+  /ping:
+    get:
+      summary: Check the healthy of Api
+      tags:
+        - Ping > Pong
+      description: Ping endpoint with no authentication required
+      responses:
+        200:
+          description: API is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponsePong'
+  /auth/register:
+    post:
+      summary: Register a customer
+      tags:
+        - Auth
+      description: Register a customer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthRegister'
+      responses:
+        201:
+          description: Create a Person, Account and User entities!
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    default: false
+                  status:
+                    type: number
+                    default: 201
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
+                      person:
+                        $ref: '#/components/schemas/Person'
+                      account:
+                        $ref: '#/components/schemas/Account'
+  /auth/login:
+    post:
+      summary: Login a customer
+      tags:
+        - Auth
+      description: Login with email and password
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AuthLogin'
+      responses:
+        200:
+          description: Login a customer with the email and password.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseAuthLogin'
+  /auth/me:
+    get:
+      summary: Get your information
+      tags:
+        - Auth
+      security:
+        - bearerAuth: []
+      description: Using your JWT can get your Person and User Model
+      responses:
+        200:
+          description: The Person and User model
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    default: false
+                  status:
+                    type: number
+                    default: 200
+                  data:
+                    type: object
+                    properties:
+                      user:
+                        $ref: '#/components/schemas/User'
+                      person:
+                        $ref: '#/components/schemas/Person'
+  /transfer/register:
+    post:
+      summary: Register a Transfer
+      tags:
+        - Transfer
+      security:
+        - bearerAuth: []
+      description: Register a transfer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TransferRegister'
+      responses:
+        201:
+          description: Create a Transfer from one account to another.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    default: false
+                  status:
+                    type: number
+                    default: 201
+                  data:
+                    type: object
+                    properties:
+                      transfer:
+                        $ref: '#/components/schemas/Transfer'
+                      originAccount:
+                        $ref: '#/components/schemas/Account'
+                      destinationAccount:
+                        $ref: '#/components/schemas/Account'
+  /transfer:
+    get:
+      summary: Get your transfers
+      tags:
+        - Transfer
+      security:
+        - bearerAuth: []
+      description: Using your JWT can get all your transfers. Limit 10.
+      responses:
+        200:
+          description: The transfers of the User
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: boolean
+                    default: false
+                  status:
+                    type: number
+                    default: 200
+                  data:
+                    type: object
+                    properties:
+                      transfers:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Transfer'
+
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    User:
+      properties:
+        email:
+          type: string
+        sessionActive:
+          type: boolean
+        status:
+          type: boolean
+        _id:
+          type: string
+    Person:
+      properties:
+        name:
+          type: string
+        lastName:
+          type: string
+        phone:
+          type: string
+        rfc:
+          type: string
+        address:
+          type: string
+        _id:
+          type: string
+    Account:
+      properties:
+        product:
+          type: string
+          enum:
+            - CHEQUERA
+            - DEBITO
+            - CREDITO
+        balance:
+          type: number
+          default: 0
+        status:
+          type: boolean
+          default: true
+        person:
+          type: string
+          description: The _id of the person schema
+        numberAccount:
+          type: string
+        nip:
+          type: string
+          description: A four digits string
+        _id:
+          type: string
+    Transfer:
+      properties:
+        user:
+          type: string
+          description: The _id of the user who realize the transfer
+        type:
+          type: string
+          description: CARGO is less money for originAccont; ABONO is more money for originAccount
+          enum:
+            - CARGO
+            - ABONO
+        operation:
+          type: string
+          enum:
+            - SPEI
+            - INTERBANCARIO
+            - TRANSFERENCIA
+            - OTHER
+        amount:
+          type: number
+        concept:
+          type: string
+        reference:
+          type: string
+        originAccount:
+          type: string
+          description: Your account
+        destinationAccount:
+          type: string
+          description: Other people account
+        applyDate:
+          type: string
+        _id:
+          type: string
+    AuthLogin:
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    ResponseAuthLogin:
+      properties:
+        status:
+          default: 200
+          type: number
+        error:
+          type: boolean
+          default: false
+        data:
+          type: object
+          properties:
+            auth:
+              type: boolean
+              default: true
+            token:
+              type: string
+              description: The JWT Token
+    AuthRegister:
+      properties:
+        name:
+          type: string
+        lastname:
+          type: string
+        phone:
+          type: string
+        rfc:
+          type: string
+        address:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        confirmPassword:
+          type: string
+    TransferRegister:
+      properties:
+        type:
+          type: string
+          description: CARGO is less money for originAccont; ABONO is more money for originAccount
+          enum:
+            - CARGO
+            - ABONO
+        operation:
+          type: string
+          enum:
+            - SPEI
+            - INTERBANCARIO
+            - TRANSFERENCIA
+            - OTHER
+        amount:
+          type: number
+        concept:
+          type: string
+        reference:
+          type: string
+        originAccount:
+          type: string
+          description: Your account
+        destinationAccount:
+          type: string
+          description: Other people account
+    ResponsePong:
+      properties:
+        status:
+          default: 200
+          type: number
+        error:
+          type: boolean
+          default: false
+        data:
+          type: string
+          default: 'pong'
+    ResponseSuccess:
+      properties:
+        status:
+          default: 200
+          type: number
+        error:
+          type: boolean
+          default: false
+        data:
+          type: object
