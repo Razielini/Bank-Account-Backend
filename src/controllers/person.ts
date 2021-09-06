@@ -18,9 +18,13 @@ const personController = (storeInjection: any) => {
   const findOne = async ({ filter }: any) =>
     functions.mongodb.fetchDocument({ store, filter }) || false;
 
+  const update = async ({ data, options }: any) =>
+    functions.mongodb.updateDocument({ store, data, options });
+
   return {
     register,
     findOne,
+    update,
   };
 };
 
