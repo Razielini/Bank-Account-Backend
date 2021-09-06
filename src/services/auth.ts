@@ -92,7 +92,7 @@ const authService = ({ store: { user, person, account } }: any) => {
 
     responses.success({
       res,
-      message: { user: user.toJSON(), person: person.toJSON() },
+      message: { user, person },
     });
   });
 
