@@ -6,7 +6,7 @@
     "declaration": true,
     "declarationMap": true,
     "strict": true,
-    "outDir": "./app",
+    "outDir": "./lib",
     "noImplicitAny": true,
     "strictNullChecks": true,
     "noImplicitThis": true,
@@ -20,7 +20,11 @@
     "experimentalDecorators": true,
     "strictPropertyInitialization": false,
     "esModuleInterop": true,
-    "typeRoots": ["./node_modules/@types"]
+    "typeRoots": ["./node_modules/@types"],
+    "baseUrl": "./",
+    "paths": {
+      "@config/*": ["src/config/*"]
+    }
   },
   "include": ["./src/**/*.tsx", "./src/**/*.ts"],
   "exclude": ["node_modules"]
