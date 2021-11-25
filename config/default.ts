@@ -1,9 +1,9 @@
 export default {
   system: {
-    port: 0,
+    port: 3100,
   },
   mongo_db: {
-    uri: '',
+    uri: 'mongodb+srv://db_user_chat_node_server:lMV2zReaxaL03UjI@cluster0.oyyxw.mongodb.net/bank-account?retryWrites=true&w=majority',
   },
   jwt: {
     secret: 'superultramegasecretpleaseonlyusefordevelopment',
